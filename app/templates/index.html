@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #5cb85c;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        #protected-button {
+            background-color: #5bc0de;
+            margin-bottom: 20px;
+        }
+
+        #protected-button:hover {
+            background-color: #46b8da;
+        }
+
+        #protected-content {
+            color: #333;
+            margin-top: 15px;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #0275d8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Register</h2>
+    <form id="register-form">
+        <label for="register-username">Username:</label>
+        <input type="text" id="register-username" name="username" required><br>
+        <label for="register-password">Password:</label>
+        <input type="password" id="register-password" name="password" required><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <h2>Login</h2>
+    <form id="login-form">
+        <label for="login-username">Username:</label>
+        <input type="text" id="login-username" name="username" required><br>
+        <label for="login-password">Password:</label>
+        <input type="password" id="login-password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <h2>Protected Content</h2>
+    <button id="protected-button">Get Protected Content</button>
+    <p id="protected-content"></p>
+
+    <a href="/problems">View All Problems</a>
+
+    <script>
+        document.getElementById('register-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        };
+
+        document.getElementById('login-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('token', result.access_token);
+                alert('Login successful');
+            } else {
+                alert('Invalid username or password');
+            }
+        };
+
+        document.getElementById('protected-button').onclick = async function () {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('You must be logged in to access this content');
+                return;
+            }
+
+            const response = await fetch('/protected', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('protected-content').innerText = `Hello, ${result.logged_in_as}`;
+            } else {
+                alert('You must be logged in to access this content');
+            }
+        };
+    </script>
+</body>
+
+</html>

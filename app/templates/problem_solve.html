@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solve Problem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .submission-code {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        #outputArea {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        #printOutput {
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Solve Problem</h1>
+    <h2>{{ problem.title }}</h2>
+    <p>{{ problem.description }}</p>
+    <p><strong>Difficulty:</strong> {{ problem.difficulty }}</p>
+    <p><strong>Input Format:</strong></p>
+    <pre>{{ problem.input_format }}</pre>
+    <p><strong>Output Format:</strong></p>
+    <pre>{{ problem.output_format }}</pre>
+    <p><strong>Constraints:</strong></p>
+    <pre>{{ problem.constraints }}</pre>
+
+    <h3>Submit Your Solution</h3>
+    <form id="solveProblemForm" data-problem-id="{{ problem.id }}">
+        <textarea id="code" name="code" rows="10" placeholder="Enter your code here..." required>{{ problem.sample_code }}</textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="outputArea" style="display: none;">
+        <h3>Output</h3>
+        <div><strong>Result:</strong> <span id="resultOutput"></span></div>
+        <div><strong>Status:</strong> <span id="statusOutput"></span></div>
+        <div><strong>Print Output:</strong></div>
+        <pre id="printOutput"></pre>
+    </div>
+
+    <h3>Submission History</h3>
+    <ul id="submissionHistory">
+        <!-- Submissions will be loaded here -->
+    </ul>
+
+    <script>
+        const problemId = document.getElementById('solveProblemForm').getAttribute('data-problem-id');
+
+        function loadSubmissionHistory() {
+            fetch(`/problems/${problemId}/submissions`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const submissionList = document.getElementById('submissionHistory');
+                submissionList.innerHTML = '';
+                data.forEach(submission => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div><strong>Problem Title:</strong> ${submission.problem_title}</div>
+                        <div><strong>Result:</strong> ${submission.result}</div>
+                        <div><strong>Status:</strong> ${submission.status}</div>
+                        <div><strong>Date:</strong> ${submission.timestamp}</div>
+                        <div class="submission-code"><strong>Code:</strong><pre>${submission.code}</pre></div>
+                    `;
+                    li.addEventListener('click', function() {
+                        const codeBlock = li.querySelector('.submission-code');
+                        codeBlock.style.display = codeBlock.style.display === 'block' ? 'none' : 'block';
+                    });
+                    submissionList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching submissions:', error));
+        }
+
+        document.getElementById('solveProblemForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const code = document.getElementById('code').value;
+
+            fetch(`/problems/${problemId}/solve`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the output area
+                document.getElementById('outputArea').style.display = 'block';
+                
+                // Update the output fields
+                document.getElementById('resultOutput').textContent = data.result;
+                document.getElementById('statusOutput').textContent = data.status;
+                document.getElementById('printOutput').textContent = data.user_print;
+
+                loadSubmissionHistory();
+            })
+            .catch(error => console.error('Error submitting solution:', error));
+        });
+
+        window.onload = loadSubmissionHistory;
+    </script>
+</body>
+</html>

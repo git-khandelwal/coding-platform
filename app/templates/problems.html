@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        ul#problemsList {
+            list-style-type: none;
+            padding: 0;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        ul#problemsList li {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        ul#problemsList li:hover {
+            transform: translateY(-2px);
+        }
+
+        .problem-link {
+            font-size: 18px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .problem-link:hover {
+            text-decoration: underline;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #addProblemLink {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            width: 200px;
+            text-align: center;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        #addProblemLink:hover {
+            background-color: #218838;
+        }
+
+        .problems-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .problems-table th,
+        .problems-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .problems-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .problems-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .problem-difficulty {
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .easy { background-color: #d4edda; color: #155724; }
+        .medium { background-color: #fff3cd; color: #856404; }
+        .hard { background-color: #f8d7da; color: #721c24; }
+
+        .edit-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ... rest of the styles ... */
+    </style>
+</head>
+
+<body>
+    <h1>Problems List</h1>
+    <table class="problems-table">
+        <thead>
+            <tr>
+                <th>Problem Title</th>
+                <th>Difficulty</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for problem in problems %}
+            <tr>
+                <td><a href="{{ url_for('problem_solve', problem_id=problem.id) }}" class="problem-link">{{ problem.title }}</a></td>
+                <td><span class="problem-difficulty {{ problem.difficulty.lower() }}">{{ problem.difficulty }}</span></td>
+                <td><a href="{{ url_for('problem_details', problem_id=problem.id) }}" class="edit-link">Edit</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('add_problem') }}" id="addProblemLink">Add New Problem</a>
+
+    <script>
+        // Assume the JWT token is stored in localStorage
+        const token = localStorage.getItem('token');
+
+        // Function to add the Authorization header to a fetch request
+        function addAuthHeader(url) {
+            return fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => response.text());
+        }
+
+        // Handle click events for problem links
+        document.querySelectorAll('.problem-link').forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent the default link behavior
+                const url = this.href;
+
+                addAuthHeader(url).then(responseText => {
+                    // Here you would handle the response, like updating the page content
+                    document.open();
+                    document.write(responseText);
+                    document.close();
+                }).catch(error => {
+                    console.error('Error fetching problem details:', error);
+                });
+            });
+        });
+
+        // Handle click event for the "Add New Problem" link
+        document.getElementById('addProblemLink').addEventListener('click', function (event) {
+            event.preventDefault();
+            const url = this.href;
+
+            addAuthHeader(url).then(responseText => {
+                // Handle the response, potentially navigating to the add problem page
+                document.open();
+                document.write(responseText);
+                document.close();
+            }).catch(error => {
+                console.error('Error fetching add problem page:', error);
+            });
+        });
+    </script>
+</body>
+
+</html>
