@@ -1,0 +1,63 @@
+POST http://127.0.0.1:5000/login
+Content-Type: application/json
+
+{"username": "test", "password": "test123"}
+
+###
+
+POST http://127.0.0.1:5000/submit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTI3NDcyNiwianRpIjoiY2Q4ZjYyNGItZmUzMS00OTdmLTgwM2QtZDcyNjY0NzRjOTY4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjUyNzQ3MjYsImNzcmYiOiJlZTk5OWFiOS1iNmVhLTQyN2YtYWU4Ni05YjRiNWUxZGFmZjMiLCJleHAiOjE3MjUyNzU2MjZ9.YwYVS8X_61P8HSviI0Z5BGa3HtoaRPd2hWsfy1rv4Lw
+
+{"problem_id": "1", "code": "def custom_function(a,b):\n print(a,b) \n return 2"}
+
+###
+
+GET http://127.0.0.1:5000/problems/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTQ0NzgwMSwianRpIjoiMmRmZjgwNWUtYTM4Ni00NDlmLWE0YTctYWExYTFhMjU0NDY1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjU0NDc4MDEsImNzcmYiOiIzNWRmMzUxNy02N2I4LTQ3N2YtYTVhOC0yOGU5ZGQ3NDUwOTciLCJleHAiOjE3MjU0NDg3MDF9.DyuQlYisC23kg_iPs8K6e2hTjPqWrR5tOtn9hGFRdiI
+
+###
+{"sample_code" : "def helper(a, b):"}
+
+
+###
+
+GET http://localhost:5000/submissions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTI3NTQzMiwianRpIjoiNmI1YjBmYTUtNjVjMy00MjdlLTg1OTEtYTFiYmEyNTdhNzA2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjUyNzU0MzIsImNzcmYiOiI4M2RhMzVjMC0yYzRmLTQ2ZjEtYmU3Zi1lZDg4MzhhNWRkNTkiLCJleHAiOjE3MjUyNzYzMzJ9.heUUtEnS67ju9Y54I1RLhegwQsv9i88nWgYhVxatX0Y
+
+###
+
+PUT http://localhost:5000/problems/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTI3NDcyNiwianRpIjoiY2Q4ZjYyNGItZmUzMS00OTdmLTgwM2QtZDcyNjY0NzRjOTY4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjUyNzQ3MjYsImNzcmYiOiJlZTk5OWFiOS1iNmVhLTQyN2YtYWU4Ni05YjRiNWUxZGFmZjMiLCJleHAiOjE3MjUyNzU2MjZ9.YwYVS8X_61P8HSviI0Z5BGa3HtoaRPd2hWsfy1rv4Lw
+
+{"sample_input": "['()()()']"}
+
+###
+
+POST http://127.0.0.1:5000/problems/5/solve
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTMwNDIzMywianRpIjoiMjhkZDk4NGYtYjJmNy00NzdhLTgyNmQtYTFkMjg1OTg2NWVmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjUzMDQyMzMsImNzcmYiOiI1ZjM3NzZjYS00NGY1LTQ1N2YtYTFlYi00MGNjYWM2ZjlkMmUiLCJleHAiOjE3MjUzMDUxMzN9.pUo4gg3YSQDypK4FIke63ZpmAFfx4koWW8jjWp-M5tg
+
+{"problem_id": "5", "code": "def custom_function(a):\n print(a) \n return 3"}
+
+
+###
+
+POST http://127.0.0.1:5000/problems/add
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTI5MDIzOSwianRpIjoiZTNmODVhZDgtNDM2YS00ZWQ0LThhMDAtYjdlYmQ1Zjg4OTViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjUyOTAyMzksImNzcmYiOiJiNjY3ZjEzNi0yZmZhLTQxY2YtYTM0MS0wOWJjOWE2MDNhY2QiLCJleHAiOjE3MjUyOTExMzl9.R5VwOn09tO6ueBggWzQCeR4t3bP5UIWzjWLiToQvGPk
+
+{"title": "Count Parenthesis",    "description": "Return whether the parenthesis are valid or not",    "difficulty": "Easy",    "input_format": "String",    "output_format": "Int",    "sample_input": "(())()(())",    "sample_output": "3",    "constraints": "Input string only consists of ( and )"}
+
+###
+
+GET http://127.0.0.1:5000/problems/add
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTI5NjQzNywianRpIjoiNThhYjdkZTItNWQ1NS00YzE0LWIyOWEtNWU3MmUwOWE3YmJmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjUyOTY0MzcsImNzcmYiOiJhMjI2ZGI0Yi1kMWI3LTRhYmYtYjliOS1kNjZmNjRkNjBmNzkiLCJleHAiOjE3MjUyOTczMzd9.9dRIl5_bFFPBL2fovRH3VBJ8sX9OeFf1Cb-HQC-b16Y
+
+###
+GET http://127.0.0.1:5000/problems/2/submissions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTQzODEyOCwianRpIjoiNmRiMjZlZjItYjI3Zi00YjBkLTgxNjctNmM1NmE0MDU3NjgwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MjU0MzgxMjgsImNzcmYiOiJjOWM4OTE2Yi1iM2E5LTQ2NGMtOGZmNy0yZDk2ZDhmZmNmYWMiLCJleHAiOjE3MjU0MzkwMjh9.qJmiNT804VGUPKG2X-bGgE1YCGV1ogvCpOGJIsU1pkg

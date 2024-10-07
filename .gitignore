@@ -1,0 +1,11 @@
+__pycache__
+
+
+# SQLAlchemy Database
+instance
+
+# SQLAlchemy Migrations
+migrations
+
+# Testing Docker Images for output
+testing.py
