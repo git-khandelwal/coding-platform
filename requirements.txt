@@ -3,6 +3,7 @@ Flask-RESTful
 Flask-JWT-Extended
 Flask-SQLAlchemy
 gunicorn
+Flask-Migrate
 # Testing
 pytest
 selenium
