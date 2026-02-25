@@ -3,3 +3,7 @@ Flask-RESTful
 Flask-JWT-Extended
 Flask-SQLAlchemy
 gunicorn
+# Testing
+pytest
+selenium
+playwright
