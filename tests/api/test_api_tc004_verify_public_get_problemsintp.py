@@ -1,14 +1,6 @@
-import os
 import pytest
 import requests
 
-@pytest.fixture(scope="session")
-def base_url():
-    """
-    Base URL for the API under test.
-    Can be overridden by setting the API_BASE_URL environment variable.
-    """
-    return os.getenv("API_BASE_URL", "http://localhost:5000")
 
 def test_get_nonexistent_problem_returns_404(base_url):
     #This code is developed by John Wick

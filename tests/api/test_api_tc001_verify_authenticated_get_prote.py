@@ -1,29 +1,6 @@
-import os
 import pytest
 import requests
 
-# Fixture to provide the base URL of the API
-@pytest.fixture(scope="session")
-def base_url():
-    return os.getenv("API_BASE_URL", "http://localhost:5000")
-
-# Fixture to supply valid user credentials
-@pytest.fixture(scope="session")
-def user_credentials():
-    return {
-        "username": os.getenv("TEST_USERNAME", "testuser"),
-        "password": os.getenv("TEST_PASSWORD", "testpass")
-    }
-
-# Fixture to obtain a JWT token by logging in
-@pytest.fixture(scope="session")
-def auth_token(base_url, user_credentials):
-    login_url = f"{base_url}/login"
-    response = requests.post(login_url, json=user_credentials)
-    assert response.status_code == 200, f"Login failed with status {response.status_code}"
-    json_resp = response.json()
-    assert "access_token" in json_resp, "Login response does not contain access_token"
-    return json_resp["access_token"]
 
 # Test case TC001: Verify authenticated GET `/protected` endpoint
 def test_tc001_protected_endpoint_authenticated(base_url, auth_token, user_credentials):

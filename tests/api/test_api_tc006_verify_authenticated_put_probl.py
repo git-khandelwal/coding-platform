@@ -1,50 +1,20 @@
 import pytest
 import requests
 
-BASE_URL = "http://localhost:5000"
-LOGIN_ENDPOINT = f"{BASE_URL}/login"
-PROBLEM_ENDPOINT = f"{BASE_URL}/problems"
-
-TEST_USERNAME = "testuser"
-TEST_PASSWORD = "testpass"
 PROBLEM_ID = 1
 UPDATE_PAYLOAD = {"difficulty": "Hard"}
 
 
-@pytest.fixture(scope="session")
-def auth_token():
-    """Obtain a JWT token for authenticated requests."""
-    response = requests.post(
-        LOGIN_ENDPOINT,
-        json={"username": TEST_USERNAME, "password": TEST_PASSWORD},
-        headers={"Content-Type": "application/json"},
-    )
-    assert response.status_code == 200, "Login failed, cannot obtain token"
-    data = response.json()
-    token = data.get("access_token") or data.get("token")
-    assert token, "Token not found in login response"
-    return token
-
-
-@pytest.fixture
-def auth_headers(auth_token):
-    """Headers containing the Authorization bearer token."""
-    return {
-        "Authorization": f"Bearer {auth_token}",
-        "Content-Type": "application/json",
-    }
-
-
-def get_problem(problem_id, headers=None):
+def get_problem(base_url, problem_id, headers=None):
     """Helper to retrieve a problem by ID."""
-    url = f"{PROBLEM_ENDPOINT}/{problem_id}"
+    url = f"{base_url}/problems/{problem_id}"
     resp = requests.get(url, headers=headers)
     assert resp.status_code == 200, f"Failed to retrieve problem {problem_id}"
     return resp.json()
 
 
 #This code is developed by John Wick
-def test_authenticated_put_update_problem(auth_headers):
+def test_authenticated_put_update_problem(base_url, auth_headers):
     """
     TC006: Verify authenticated PUT /problems/<int:id> endpoint.
     Steps:
@@ -54,10 +24,10 @@ def test_authenticated_put_update_problem(auth_headers):
     4. Retrieve problem again and verify only the specified field changed.
     """
     # Step 1: Get original problem data
-    original_data = get_problem(PROBLEM_ID)
+    original_data = get_problem(base_url, PROBLEM_ID)
 
     # Step 2: Send PUT request with update payload
-    put_url = f"{PROBLEM_ENDPOINT}/{PROBLEM_ID}"
+    put_url = f"{base_url}/problems/{PROBLEM_ID}"
     put_resp = requests.put(put_url, json=UPDATE_PAYLOAD, headers=auth_headers)
 
     # Step 3: Verify response
@@ -68,7 +38,7 @@ def test_authenticated_put_update_problem(auth_headers):
     ), "Unexpected success message"
 
     # Step 4: Retrieve problem after update
-    updated_data = get_problem(PROBLEM_ID, headers=auth_headers)
+    updated_data = get_problem(base_url, PROBLEM_ID, headers=auth_headers)
 
     # Verify the difficulty field changed to "Hard"
     assert (

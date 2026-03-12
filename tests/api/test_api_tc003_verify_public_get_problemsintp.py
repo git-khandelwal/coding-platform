@@ -1,17 +1,5 @@
-import os
 import pytest
-import requests
 
-@pytest.fixture(scope="session")
-def base_url():
-    """Base URL for the API under test."""
-    return os.getenv("BASE_URL", "http://localhost:5000")
-
-@pytest.fixture
-def client():
-    """Provides a requests session for the duration of a test."""
-    with requests.Session() as session:
-        yield session
 
 def test_get_existing_problem_details(base_url, client):
     #This code is developed by John Wick

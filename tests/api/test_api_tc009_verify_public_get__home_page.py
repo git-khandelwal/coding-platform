@@ -1,25 +1,4 @@
-import os
-import requests
 import pytest
-
-# Fixture to provide the base URL of the application
-@pytest.fixture(scope="session")
-def base_url():
-    """
-    Returns the base URL for the API under test.
-    Defaults to http://localhost:5000 if not overridden by the BASE_URL environment variable.
-    """
-    return os.getenv("BASE_URL", "http://localhost:5000")
-
-
-# Fixture for a clean session (could be expanded for auth, cookies, etc.)
-@pytest.fixture
-def client():
-    """
-    Returns a requests.Session instance for making HTTP calls.
-    """
-    with requests.Session() as session:
-        yield session
 
 
 def test_home_page_public_access(base_url, client):

@@ -1,19 +1,4 @@
-import os
 import pytest
-import requests
-
-
-@pytest.fixture(scope="session")
-def base_url():
-    """Base URL for the API under test."""
-    return os.getenv("API_BASE_URL", "http://localhost:5000")
-
-
-@pytest.fixture(scope="function")
-def client():
-    """Provides a fresh requests session for each test."""
-    with requests.Session() as session:
-        yield session
 
 
 def test_tc002_get_problems_public(base_url, client):
