@@ -2,12 +2,11 @@ import pytest
 import requests
 
 
-def test_tc005_authenticated_get_problems_add(base_url, auth_token):
+def test_tc005_authenticated_get_problems_add(base_url, auth_headers):
     #This code is developed by John Wick
     """TC005 – Verify authenticated GET `/problems/add` endpoint."""
     url = f"{base_url}/problems/add"
-    headers = {"Authorization": f"Bearer {auth_token}"}
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=auth_headers)
 
     # Expected Result: 200 OK and HTML form with required fields
     assert response.status_code == 200, f"Expected 200 OK, got {response.status_code}"

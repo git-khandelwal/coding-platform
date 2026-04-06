@@ -1,16 +1,14 @@
 """Shared fixtures for UI tests."""
-import os
 import pytest
+
+from tests.lib.config import get_base_url, get_user_credentials
 
 
 @pytest.fixture(scope="session")
 def base_url():
-    return os.getenv("API_BASE_URL", "http://localhost:5000")
+    return get_base_url()
 
 
 @pytest.fixture(scope="session")
 def user_credentials():
-    return {
-        "username": os.getenv("TEST_USERNAME", "testuser"),
-        "password": os.getenv("TEST_PASSWORD", "testpass"),
-    }
+    return get_user_credentials()

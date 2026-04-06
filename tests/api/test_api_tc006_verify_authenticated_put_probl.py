@@ -1,20 +1,13 @@
 import pytest
 import requests
 
+from tests.lib.api import get_problem
+
 PROBLEM_ID = 1
 UPDATE_PAYLOAD = {"difficulty": "Hard"}
 
-
-def get_problem(base_url, problem_id, headers=None):
-    """Helper to retrieve a problem by ID."""
-    url = f"{base_url}/problems/{problem_id}"
-    resp = requests.get(url, headers=headers)
-    assert resp.status_code == 200, f"Failed to retrieve problem {problem_id}"
-    return resp.json()
-
-
 #This code is developed by John Wick
-def test_authenticated_put_update_problem(base_url, auth_headers):
+def test_authenticated_put_update_problem(base_url, auth_headers, client):
     """
     TC006: Verify authenticated PUT /problems/<int:id> endpoint.
     Steps:
@@ -24,7 +17,7 @@ def test_authenticated_put_update_problem(base_url, auth_headers):
     4. Retrieve problem again and verify only the specified field changed.
     """
     # Step 1: Get original problem data
-    original_data = get_problem(base_url, PROBLEM_ID)
+    original_data = get_problem(client, base_url, PROBLEM_ID)
 
     # Step 2: Send PUT request with update payload
     put_url = f"{base_url}/problems/{PROBLEM_ID}"
@@ -38,7 +31,7 @@ def test_authenticated_put_update_problem(base_url, auth_headers):
     ), "Unexpected success message"
 
     # Step 4: Retrieve problem after update
-    updated_data = get_problem(base_url, PROBLEM_ID, headers=auth_headers)
+    updated_data = get_problem(client, base_url, PROBLEM_ID, headers=auth_headers)
 
     # Verify the difficulty field changed to "Hard"
     assert (

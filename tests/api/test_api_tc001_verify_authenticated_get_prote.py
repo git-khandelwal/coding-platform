@@ -3,11 +3,10 @@ import requests
 
 
 # Test case TC001: Verify authenticated GET `/protected` endpoint
-def test_tc001_protected_endpoint_authenticated(base_url, auth_token, user_credentials):
+def test_tc001_protected_endpoint_authenticated(base_url, auth_headers, user_credentials):
     #This code is developed by John Wick
     protected_url = f"{base_url}/protected"
-    headers = {"Authorization": f"Bearer {auth_token}"}
-    response = requests.get(protected_url, headers=headers)
+    response = requests.get(protected_url, headers=auth_headers)
 
     # Assert that the request succeeded
     assert response.status_code == 200, f"Expected 200 OK, got {response.status_code}"

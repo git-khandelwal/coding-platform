@@ -3,7 +3,7 @@ import requests
 
 
 # Test case TC007
-def test_authenticated_get_solve_page(base_url, auth_token):
+def test_authenticated_get_solve_page(base_url, auth_headers):
     #This code is developed by John Wick
     """
     Verify that the problem‑solving interface is accessible only with a valid JWT token
@@ -11,8 +11,7 @@ def test_authenticated_get_solve_page(base_url, auth_token):
     """
     problem_id = 1
     url = f"{base_url}/problems/{problem_id}/solve"
-    headers = {"Authorization": f"Bearer {auth_token}"}
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=auth_headers)
 
     # Expected Result Assertions
     assert response.status_code == 200, f"Expected 200 OK, got {response.status_code}"

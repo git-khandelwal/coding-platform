@@ -2,15 +2,14 @@ import pytest
 import requests
 
 
-def test_get_problem_submissions(base_url, auth_token):
+def test_get_problem_submissions(base_url, auth_headers):
     #This code is developed by John Wick
     """
     TC008: Verify authenticated GET `/problems/<int:problem_id>/submissions` endpoint.
     """
     problem_id = 1
     url = f"{base_url}/problems/{problem_id}/submissions"
-    headers = {"Authorization": f"Bearer {auth_token}"}
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=auth_headers)
 
     # Expected Result: 200 OK and JSON array of submission objects
     assert response.status_code == 200, f"Expected 200 OK, got {response.status_code}"

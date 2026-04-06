@@ -1,22 +1,20 @@
 """Shared fixtures for API tests."""
-import os
 import pytest
 import requests
+
+from tests.lib.config import get_base_url, get_user_credentials
 
 
 @pytest.fixture(scope="session")
 def base_url():
     """Base URL for the API under test. Use API_BASE_URL or BASE_URL env var."""
-    return os.getenv("API_BASE_URL", os.getenv("BASE_URL", "http://localhost:5000"))
+    return get_base_url()
 
 
 @pytest.fixture(scope="session")
 def user_credentials():
     """Valid user credentials for login. Use TEST_USERNAME / TEST_PASSWORD env to override."""
-    return {
-        "username": os.getenv("TEST_USERNAME", "testuser"),
-        "password": os.getenv("TEST_PASSWORD", "testpass"),
-    }
+    return get_user_credentials()
 
 
 @pytest.fixture(scope="session")
